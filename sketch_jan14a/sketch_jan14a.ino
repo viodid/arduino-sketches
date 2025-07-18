@@ -10,7 +10,7 @@ int switchState = LOW;
 
 int toggleSwitch() {
   int isPushed = digitalRead(2);
-  if (isPushed && !switchState)it
+  if (isPushed && !switchState)
     return HIGH;
   else if (isPushed && switchState)
     return LOW;
