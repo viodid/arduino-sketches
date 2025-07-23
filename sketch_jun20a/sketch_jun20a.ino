@@ -39,6 +39,7 @@ void setup() {
 
   Serial.begin(57600);
 
+
   for (int base = 0; base < 255; base+=16) {
     byte data[16];  
     for (int offset = 0; offset < 16; offset++) {
