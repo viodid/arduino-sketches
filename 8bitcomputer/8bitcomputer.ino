@@ -54,7 +54,7 @@ void writeEEPROM(int address, byte data) {
 }
 
 void printContents() {
-  for (int base = 0; base <= 25 5; base += 16) {
+  for (int base = 0; base <= 255; base += 16) {
     byte data[16];
     for (int offset = 0; offset <= 15; offset += 1) {
       data[offset] = readEEPROM(base + offset);
@@ -80,10 +80,10 @@ void setup() {
   pinMode(WRITE_EN, OUTPUT);
   Serial.begin(57600);
 
-  // Erase entire EEPROM
+  // // Erase entire EEPROM
   // Serial.print("Erasing EEPROM");
   // for (int address = 0; address <= 255; address += 1) {
-  //   writeEEPROM(address, 0xff);
+  //   writeEEPROM(address, 0x55);
 
   //   if (address % 64 == 0) {
   //     Serial.print(".");
