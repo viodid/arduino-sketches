@@ -80,16 +80,16 @@ void setup() {
   pinMode(WRITE_EN, OUTPUT);
   Serial.begin(57600);
 
-  // // Erase entire EEPROM
-  // Serial.print("Erasing EEPROM");
-  // for (int address = 0; address <= 255; address += 1) {
-  //   writeEEPROM(address, 0x55);
+  // Erase entire EEPROM
+  Serial.print("Erasing EEPROM");
+  for (int address = 0; address <= 255; address += 1) {
+    writeEEPROM(address, 0xff);
 
-  //   if (address % 64 == 0) {
-  //     Serial.print(".");
-  //   }
-  // }
-  // Serial.println(" done");
+    if (address % 64 == 0) {
+      Serial.print(".");
+    }
+  }
+  Serial.println(" done");
 
 
   // // Program data bytes
