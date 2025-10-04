@@ -81,27 +81,60 @@ void setup() {
   Serial.begin(57600);
 
   // Erase entire EEPROM
-  Serial.print("Erasing EEPROM");
-  for (int address = 0; address <= 255; address += 1) {
-    writeEEPROM(address, 0xff);
-
-    if (address % 64 == 0) {
-      Serial.print(".");
-    }
-  }
-  Serial.println(" done");
-
-
-  // // Program data bytes
-  // Serial.print("Programming EEPROM");
-  // for (int address = 0; address < sizeof(data); address += 1) {
-  //   writeEEPROM(address, data[address]);
+  // Serial.print("Erasing EEPROM");
+  // for (int address = 0; address <= 255; address += 1) {
+  //   writeEEPROM(address, 0xff);
 
   //   if (address % 64 == 0) {
   //     Serial.print(".");
   //   }
   // }
   // Serial.println(" done");
+
+  // Bit patterns for the digits 0..9
+  byte digits[] = { 0x7e, 0x30, 0x6d, 0x79, 0x33, 0x5b, 0x5f, 0x70, 0x7f, 0x7b };
+
+  // Program data bytes
+  Serial.print("Programming EEPROM");
+  Serial.println("Programming ones place");
+  for (int value = 0; value <= 255; value += 1) {
+    writeEEPROM(value, digits[value % 10]);
+  }
+  Serial.println("Programming tens place");
+  for (int value = 0; value <= 255; value += 1) {
+    writeEEPROM(value + 256, digits[(value / 10) % 10]);
+  }
+  Serial.println("Programming hundreds place");
+  for (int value = 0; value <= 255; value += 1) {
+    writeEEPROM(value + 512, digits[(value / 100) % 10]);
+  }
+  Serial.println("Programming sign");
+  for (int value = 0; value <= 255; value += 1) {
+    writeEEPROM(value + 768, 0);
+  }
+
+  Serial.println("Programming ones place (twos complement)");
+  for (int value = -128; value <= 127; value += 1) {
+    writeEEPROM((byte)value + 1024, digits[abs(value) % 10]);
+  }
+  Serial.println("Programming tens place (twos complement)");
+  for (int value = -128; value <= 127; value += 1) {
+    writeEEPROM((byte)value + 1280, digits[abs(value / 10) % 10]);
+  }
+  Serial.println("Programming hundreds place (twos complement)");
+  for (int value = -128; value <= 127; value += 1) {
+    writeEEPROM((byte)value + 1536, digits[abs(value / 100) % 10]);
+  }
+  Serial.println("Programming sign (twos complement)");
+  for (int value = -128; value <= 127; value += 1) {
+    if (value < 0) {
+      writeEEPROM((byte)value + 1792, 0x01);
+    } else {
+      writeEEPROM((byte)value + 1792, 0);
+    }
+  }
+
+  Serial.println(" done");
 
 
   // Read and print out the contents of the EERPROM
